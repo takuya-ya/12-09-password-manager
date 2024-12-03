@@ -27,6 +27,8 @@ done
 # エラーが無い場合は感謝メッセージ出力、ある場合はエラーメッセージ出力、
 if [ -z "$error_messages" ]; then
     printf 'Thank you\033[31m!\033[0m\n'
+    echo "$service_name":"$user_name":"$password" >> user_input.txt
+    return
 else
     for i in "${error_messages[@]}"; do
         printf $i
