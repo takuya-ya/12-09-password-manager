@@ -28,11 +28,14 @@ done
 
 # エラーが無い場合は感謝メッセージ出力、ある場合はエラーメッセージ出力、
 if [ -z "$error_messages" ]; then
-    echo "$service_name":"$user_name":"$password" >> user_input.txt 2>error.txt
-        if [ $? -ne 0 ]; then
-            printf '\033[31m入力内容の保存に失敗しました\033[0m\n'
-            return
-        fi
+    (
+        echo "$service_name":"$user_name":"$password" >> user_input.txt
+    ) 2>error.txt
+
+    if [ $? -ne 0 ]; then
+        printf '\033[31m入力内容の保存に失敗しました\033[0m\n'
+        return
+    fi
     printf 'Thank you\033[31m!\033[0m\n'
 else
     for i in "${error_messages[@]}"; do
