@@ -47,7 +47,7 @@ if [ -z "$error_messages" ]; then
     printf 'Thank you\033[31m!\033[0m\n'
 # エラーがある場合、エラーメッセージ出力
 else
-    for i in "${error_messages[@]}"; do
-        printf $i
+    for error_message in "${error_messages[@]}"; do
+        printf $error_message
     done
 fi
