@@ -1,5 +1,20 @@
 #!/bin/bash
 
+validation()
+{
+    max_length=50
+    # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
+    for index in ${!user_inputs[@]}; do
+        if [ -z "${user_inputs[$index]}" ]; then
+            error_messages+=("${original_message[$index]}")
+        fi
+
+        if [ "${#user_inputs[index]}" -ge $max_length ]; then
+            error_messages+=("${input_length_errors[$index]}")
+        fi
+    done
+}
+
 echo 'パスワードマネージャーへようこそ！'
 echo -n 'サービス名を入力してください：'
 read service_name
@@ -22,17 +37,7 @@ declare -a input_length_errors=(
 )
 declare -a error_messages=()
 
-max_length=50
-# 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
-for index in ${!user_inputs[@]}; do
-    if [ -z "${user_inputs[$index]}" ]; then
-        error_messages+=("${original_message[$index]}")
-    fi
-
-    if [ "${#user_inputs[index]}" -ge $max_length ]; then
-        error_messages+=("${input_length_errors[$index]}")
-    fi
-done
+validation
 
 # エラーが無い場合、入力をファイルに保存
 if [ -z "$error_messages" ]; then
