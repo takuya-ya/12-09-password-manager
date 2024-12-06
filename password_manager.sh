@@ -15,6 +15,20 @@ validation()
     done
 }
 
+save_to_file()
+{
+    (
+        echo "$service_name":"$user_name":"$password" >> user_input.txt
+    ) 2>error.txt
+
+    #保存失敗時、エラーメッセージを出力
+    if [ $? -ne 0 ]; then
+        printf '\033[31m入力内容の保存に失敗しました\033[0m\n'
+        return
+    fi
+    printf 'Thank you\033[31m!\033[0m\n'
+}
+
 echo 'パスワードマネージャーへようこそ！'
 echo -n 'サービス名を入力してください：'
 read service_name
@@ -41,15 +55,7 @@ validation
 
 # エラーが無い場合、入力をファイルに保存
 if [ -z "$error_messages" ]; then
-    (
-        echo "$service_name":"$user_name":"$password" >> user_input.txt
-    ) 2>error.txt
-    #保存失敗時、エラーメッセージを出力
-    if [ $? -ne 0 ]; then
-        printf '\033[31m入力内容の保存に失敗しました\033[0m\n'
-        return
-    fi
-    printf 'Thank you\033[31m!\033[0m\n'
+    save_to_file
 # エラーがある場合、エラーメッセージ出力
 else
     for error_message in "${error_messages[@]}"; do
