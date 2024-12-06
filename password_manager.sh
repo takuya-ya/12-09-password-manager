@@ -28,8 +28,8 @@ for index in ${!user_inputs[@]}; do
     if [ -z "${user_inputs[$index]}" ]; then
         error_messages+=("${original_message[$index]}")
     fi
-    
-    if [ "${#user_inputs[index]}" -ge $this_max_length ]; then
+
+    if [ "${#user_inputs[index]}" -ge $max_length ]; then
         error_messages+=("${input_length_errors[$index]}")
     fi
 done
