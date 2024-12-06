@@ -1,9 +1,9 @@
 #!/bin/bash
 
-validation()
+# 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
+validation_user_inputs()
 {
     max_length=50
-    # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
     for index in ${!user_inputs[@]}; do
         if [ -z "${user_inputs[$index]}" ]; then
             error_messages+=("${original_message[$index]}")
@@ -51,7 +51,8 @@ declare -a input_length_errors=(
 )
 declare -a error_messages=()
 
-validation
+# 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
+validation_user_inputs
 
 # エラーが無い場合、入力をファイルに保存
 if [ -z "$error_messages" ]; then
