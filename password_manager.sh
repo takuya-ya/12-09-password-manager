@@ -15,16 +15,24 @@ declare -a original_message=(
   '\033[31mユーザー名が入力されていません\033[0m\n'
   '\033[31mパスワードが入力されていません\033[0m\n'
 )
+declare -a input_length_errors=(
+  '\033[31mサービス名は50文字以内で入力してください\033[0m\n'
+  '\033[31mユーザー名は50文字以内で入力してください\033[0m\n'
+  '\033[31mパスワードは50文字以内で入力してください\033[0m\n'
+)
 declare -a error_messages=()
 
+max_length=50
 # 未入力項目を確認し、未入力の場合はエラーメッセージを追加
 for index in ${!user_inputs[@]}; do
     if [ -z "${user_inputs[$index]}" ]; then
         error_messages+=("${original_message[$index]}")
     fi
-done
 
-# ユーザー入力の文字数上限を設定
+    if [ "${#user_inputs[index]}" -ge $this_max_length ]; then
+        error_messages+=("${input_length_errors[$index]}")
+    fi
+done
 
 # エラーが無い場合は感謝メッセージ出力、ある場合はエラーメッセージ出力、
 if [ -z "$error_messages" ]; then
