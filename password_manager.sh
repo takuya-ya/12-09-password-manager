@@ -1,5 +1,18 @@
 #!/bin/bash
 
+declare -A user_inputs=([service_name]="$service_name" [user_name]="$user_name" [password]="$password")
+declare -A original_message=(
+  [service_name]='\033[31mサービス名が入力されていません\033[0m\n'
+  [user_name]='\033[31mユーザー名が入力されていません\033[0m\n'
+  [password]='\033[31mパスワードが入力されていません\033[0m\n'
+)
+declare -A input_length_errors=(
+  [service_name]='\033[31mサービス名は50文字以内で入力してください\033[0m\n'
+  [user_name]='\033[31mユーザー名は50文字以内で入力してください\033[0m\n'
+  [password]='\033[31mパスワードは50文字以内で入力してください\033[0m\n'
+)
+declare -a error_messages=()
+
 # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
 validation_user_inputs()
 {
@@ -9,7 +22,7 @@ validation_user_inputs()
             error_messages+=("${original_message[$index]}")
         fi
 
-        if [ "${#user_inputs[index]}" -ge $max_length ]; then
+        if [ "${#user_inputs[$index]}" -ge $max_length ]; then
             error_messages+=("${input_length_errors[$index]}")
         fi
     done
@@ -18,7 +31,7 @@ validation_user_inputs()
 save_to_file()
 {
     (
-        echo "$service_name":"$user_name":"$password" >> user_input.txt
+        echo "${user_inputs[service_name]}":"${user_inputs[user_name]}":"${user_inputs[password]}" >> d/user_input.txt
     ) 2>error.txt
 
     #保存失敗時、エラーメッセージを出力
@@ -31,25 +44,12 @@ save_to_file()
 
 echo 'パスワードマネージャーへようこそ！'
 echo -n 'サービス名を入力してください：'
-read service_name
+read user_inputs[service_name]
 echo -n 'ユーザー名を入力してください：'
-read user_name
+read user_inputs[user_name]
 echo -n 'パスワードを入力してください：'
-read -s password
+read -s user_inputs[password]
 echo
-
-declare -a user_inputs=("$service_name" "$user_name" "$password")
-declare -a original_message=(
-  '\033[31mサービス名が入力されていません\033[0m\n'
-  '\033[31mユーザー名が入力されていません\033[0m\n'
-  '\033[31mパスワードが入力されていません\033[0m\n'
-)
-declare -a input_length_errors=(
-  '\033[31mサービス名は50文字以内で入力してください\033[0m\n'
-  '\033[31mユーザー名は50文字以内で入力してください\033[0m\n'
-  '\033[31mパスワードは50文字以内で入力してください\033[0m\n'
-)
-declare -a error_messages=()
 
 # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
 validation_user_inputs
