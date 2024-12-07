@@ -42,7 +42,12 @@ save_to_file()
     printf 'Thank you\033[31m!\033[0m\n'
 }
 
-echo 'パスワードマネージャーへようこそ！'
+while true; do
+    echo 'パスワードマネージャーへようこそ！'
+    read -p '次の選択肢から入力してください(Add Password/Get Password/Exit):' menu
+    
+done
+
 echo -n 'サービス名を入力してください：'
 read user_inputs[service_name]
 echo -n 'ユーザー名を入力してください：'
