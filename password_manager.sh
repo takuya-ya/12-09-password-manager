@@ -45,7 +45,22 @@ save_to_file()
 while true; do
     echo 'パスワードマネージャーへようこそ！'
     read -p '次の選択肢から入力してください(Add Password/Get Password/Exit):' menu
-    
+    case $menu in
+        'Add Password')
+            add_password
+            ;;
+        'Get Password')
+            get_password
+            ;;
+        'Exit')
+            exit
+            ;;
+        *)
+            printf '\033[31m選択肢から入力してください\033[0m'
+            echo ''
+            ;;
+    esac
+    echo ''
 done
 
 echo -n 'サービス名を入力してください：'
