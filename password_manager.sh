@@ -31,7 +31,7 @@ validation_user_inputs()
 save_to_file()
 {
     (
-        echo "${user_inputs[service_name]}":"${user_inputs[user_name]}":"${user_inputs[password]}" >> d/user_input.txt
+        echo "${user_inputs[service_name]}":"${user_inputs[user_name]}":"${user_inputs[password]}" >> user_input.txt
     ) 2>error.txt
 
     #保存失敗時、エラーメッセージを出力
