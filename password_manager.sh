@@ -1,17 +1,41 @@
 #!/bin/bash
 
-declare -A user_inputs=([service_name]="$service_name" [user_name]="$user_name" [password]="$password")
-declare -A original_message=(
-  [service_name]='\033[31mサービス名が入力されていません\033[0m\n'
-  [user_name]='\033[31mユーザー名が入力されていません\033[0m\n'
-  [password]='\033[31mパスワードが入力されていません\033[0m\n'
-)
-declare -A input_length_errors=(
-  [service_name]='\033[31mサービス名は50文字以内で入力してください\033[0m\n'
-  [user_name]='\033[31mユーザー名は50文字以内で入力してください\033[0m\n'
-  [password]='\033[31mパスワードは50文字以内で入力してください\033[0m\n'
-)
-declare -a error_messages=()
+add_password()
+{
+    declare -A original_message=(
+    [service_name]='\033[31mサービス名が入力されていません\033[0m\n'
+    [user_name]='\033[31mユーザー名が入力されていません\033[0m\n'
+    [password]='\033[31mパスワードが入力されていません\033[0m\n'
+    )
+    declare -A input_length_errors=(
+    [service_name]='\033[31mサービス名は50文字以内で入力してください\033[0m\n'
+    [user_name]='\033[31mユーザー名は50文字以内で入力してください\033[0m\n'
+    [password]='\033[31mパスワードは50文字以内で入力してください\033[0m\n'
+    )
+    local -A user_inputs=([service_name]="" [user_name]="" [password]="")
+    local -a error_messages=()
+
+    echo -n 'サービス名を入力してください：'
+    read user_inputs[service_name]
+    echo -n 'ユーザー名を入力してください：'
+    read user_inputs[user_name]
+    echo -n 'パスワードを入力してください：'
+    read -s user_inputs[password]
+    echo
+
+    # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
+    validation_user_inputs
+
+    # エラーが無い場合、入力をファイルに保存
+    if [ -z "$error_messages" ]; then
+        save_to_file
+    # エラーがある場合、エラーメッセージ出力
+    else
+        for error_message in "${error_messages[@]}"; do
+            printf $error_message
+        done
+    fi
+}
 
 # 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
 validation_user_inputs()
@@ -62,24 +86,3 @@ while true; do
     esac
     echo ''
 done
-
-echo -n 'サービス名を入力してください：'
-read user_inputs[service_name]
-echo -n 'ユーザー名を入力してください：'
-read user_inputs[user_name]
-echo -n 'パスワードを入力してください：'
-read -s user_inputs[password]
-echo
-
-# 未入力項目と文字数超過を確認し、該当するエラーメッセージを配列に追加
-validation_user_inputs
-
-# エラーが無い場合、入力をファイルに保存
-if [ -z "$error_messages" ]; then
-    save_to_file
-# エラーがある場合、エラーメッセージ出力
-else
-    for error_message in "${error_messages[@]}"; do
-        printf $error_message
-    done
-fi
