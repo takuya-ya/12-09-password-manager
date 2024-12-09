@@ -15,6 +15,7 @@ add_password()
     local -A user_inputs=([service_name]="" [user_name]="" [password]="")
     local -a error_messages=()
 
+    # TODO:echoをreadに変更し行数削減
     echo -n 'サービス名を入力してください：'
     read user_inputs[service_name]
     echo -n 'ユーザー名を入力してください：'
@@ -66,14 +67,23 @@ save_to_file()
     printf 'Thank you\033[31m!\033[0m\n'
 }
 
+get_password()
+{
+    read -p 'サービス名を入力してください:' service_name
+    grep "$service_name" user_input.txt
+    # サービス名が登録されていなった場合
+    # ユーザー情報の出力
+}
+
 while true; do
     echo 'パスワードマネージャーへようこそ！'
     read -p '次の選択肢から入力してください(Add Password/Get Password/Exit):' menu
     case $menu in
-        'Add Password')
+    # fix: テスト終了後条件文fを修正
+        'a')
             add_password
             ;;
-        'Get Password')
+        'g')
             get_password
             ;;
         'Exit')
